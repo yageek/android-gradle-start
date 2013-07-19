@@ -4,13 +4,25 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.4.2'
+        
+        classpath 'com.android.tools.build:gradle:0.5.+'
+        classpath 'com.googlecode.androidannotations:androidannotations:2.7.1'
     }
 }
 
 apply plugin: 'android'
 
-android {
-	buildToolsVersion "17.0"
-    compileSdkVersion 17
+ repositories {
+        mavenCentral()
+    }
+
+dependencies {
+     compile 'com.googlecode.androidannotations:androidannotations-api:2.7.1'
 }
+  
+android {
+    compileSdkVersion 17
+    buildToolsVersion '17.0.0'
+
+}
+
