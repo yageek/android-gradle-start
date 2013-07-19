@@ -1,4 +1,4 @@
-package com.thirstyturtle;
+package com.yageek;
 
 import android.app.Activity;
 import android.os.Bundle;
