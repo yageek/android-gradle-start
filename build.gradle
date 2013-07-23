@@ -4,25 +4,53 @@ buildscript {
     }
 
     dependencies {
-        
         classpath 'com.android.tools.build:gradle:0.5.+'
-        classpath 'com.googlecode.androidannotations:androidannotations:2.7.1'
     }
 }
 
 apply plugin: 'android'
 
- repositories {
-        mavenCentral()
-    }
+repositories {
+    mavenCentral()
+}
 
 dependencies {
-     compile 'com.googlecode.androidannotations:androidannotations-api:2.7.1'
+    compile 'com.android.support:support-v4:13.0.+'
+    compile 'com.googlecode.androidannotations:androidannotations-api:2.7.1'
+    compile 'com.googlecode.androidannotations:androidannotations:2.7.1'
 }
-  
+
 android {
     compileSdkVersion 17
-    buildToolsVersion '17.0.0'
+    buildToolsVersion "17.0.0"
 
+    defaultConfig {
+        minSdkVersion 7
+        targetSdkVersion 16
+    }
 }
 
+def annotationDirs = file('src/main/aa_gen')
+task annotationsDir {
+
+    outputs.dir annotationDirs
+
+    doFirst {
+        println 'Test if directory exists'
+        if (!annotationDirs.isDirectory()) {
+            println 'Creating: ' + annotationDirs
+            annotationDirs.mkdirs()
+        }
+    }
+}
+
+tasks.clean.dependsOn tasks.cleanAnnotationsDir
+
+android.applicationVariants.each { variant ->
+    println 'Generation dir: ' + annotationDirs
+    variant.javaCompile.dependsOn annotationsDir
+    variant.javaCompile.options.compilerArgs += [
+            '-processor', 'com.googlecode.androidannotations.AndroidAnnotationProcessor',
+            '-s',annotationDirs
+    ]
+}
